@@ -12,7 +12,6 @@ import (
 
 var (
 	Directory string
-	Open      bool
 	Git       bool
 )
 
@@ -25,7 +24,6 @@ Created at {{ .Timestamp }}`
 func init() {
 	rootCmd.AddCommand(initCommand)
 	initCommand.Flags().StringVarP(&Directory, "directory", "d", "", "directory")
-	initCommand.Flags().BoolVarP(&Open, "open", "o", false, "open")
 	initCommand.Flags().BoolVarP(&Git, "git", "g", false, "git")
 
 	// Make sure that the directory flag is provided
