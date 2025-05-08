@@ -3,8 +3,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"text/template"
 	"time"
@@ -16,12 +18,14 @@ import (
 var (
 	Name     string
 	Template string
+	Open     bool
 )
 
 func init() {
 	rootCmd.AddCommand(newCommand)
 	newCommand.Flags().StringVarP(&Name, "name", "n", "", "name")
 	newCommand.Flags().StringVarP(&Template, "template", "t", "default.md", "template")
+	newCommand.Flags().BoolVarP(&Open, "open", "o", false, "open")
 	newCommand.MarkFlagRequired("name")
 }
 
@@ -85,6 +89,31 @@ var newCommand = &cobra.Command{
 		}
 
 		defer f.Close()
+
+		if Open {
+			editor := os.Getenv("EDITOR")
+
+			if editor == "" {
+				if runtime.GOOS == "windows" {
+					editor = "nodepad"
+				} else {
+					editor = "nano"
+				}
+			}
+
+			cmd := exec.Command(editor, nameWithExtension)
+
+			cmd.Stdin = os.Stdin
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+
+			err := cmd.Run()
+			if err != nil {
+				fmt.Println("error opening in editor:", err)
+				return
+			}
+
+		}
 
 		fmt.Printf("successfully created note %s\n", filepath.Base(Name))
 	},
