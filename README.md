@@ -25,6 +25,7 @@ Creates a new note using a template.
 **Flags:**
 
 - `-n, --name` name of the note. required.
+- `-o, --open` open in $EDITOR if set. if not, open in notepad (windows) or nano (macos & linux). default `false`
 - `-t, --template` name of the template. default `default`
 
 ## Templates
