@@ -15,7 +15,9 @@ var (
 	Git       bool
 )
 
-var configTemplate = `template-dir=".templates"`
+const defaultTemplatesDir = ".templates"
+
+var configTemplate = fmt.Sprintf(`template-dir="%s"`, defaultTemplatesDir)
 
 var defaultTemplate = `# {{ .Name }}
 
@@ -49,7 +51,7 @@ var initCommand = &cobra.Command{
 			return
 		}
 
-		err = os.Mkdir(path.Join(dirTrimmed, ".templates"), 0750)
+		err = os.Mkdir(path.Join(dirTrimmed, defaultTemplatesDir), 0750)
 		if err != nil {
 			fmt.Println("error creating template dir:", err)
 			return
@@ -64,7 +66,7 @@ var initCommand = &cobra.Command{
 
 		cf.WriteString(configTemplate)
 
-		tf, err := os.Create(path.Join(dirTrimmed, "templates", "default.md"))
+		tf, err := os.Create(path.Join(dirTrimmed, defaultTemplatesDir, "default.md"))
 		if err != nil {
 			fmt.Println("error creating default template:", err)
 			return
