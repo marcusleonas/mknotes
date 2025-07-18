@@ -15,7 +15,7 @@ var (
 	Git       bool
 )
 
-var configTemplate = `template-dir="templates"`
+var configTemplate = `template-dir=".templates"`
 
 var defaultTemplate = `# {{ .Name }}
 
@@ -49,7 +49,7 @@ var initCommand = &cobra.Command{
 			return
 		}
 
-		err = os.Mkdir(path.Join(dirTrimmed, "templates"), 0750)
+		err = os.Mkdir(path.Join(dirTrimmed, ".templates"), 0750)
 		if err != nil {
 			fmt.Println("error creating template dir:", err)
 			return
